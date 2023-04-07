@@ -6,3 +6,4 @@ numpy
 socceraction
 xgboost
 tqdm
+seaborn
