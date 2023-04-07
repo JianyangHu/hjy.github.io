@@ -4,7 +4,11 @@ import pandas as pd
 from PIL import Image
 from visualization.passing_network import draw_pitch, draw_pass_map
 import matplotlib.pyplot as plt
-
+# 引入 FigureCanvasAgg
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+# 引入 Image
+import numpy as np
+import PIL.Image as Image
 
 data_all=pd.read_csv("中超2021_pass.csv")
 
@@ -90,8 +94,26 @@ def plot_passing_netowrk(passing_data):
     ax = draw_pass_map(ax, player_position, player_pass_count, player_pass_value,
                 pair_pass_count, pair_pass_value, plot_title, plot_legend)
 
-    plt.savefig("1.jpg")
+    canvas = FigureCanvasAgg(plt.gcf())
 
+    # 绘制图像
+    canvas.draw()
+    # 获取图像尺寸
+    w, h = canvas.get_width_height()
+    # 解码string 得到argb图像
+    buf = np.fromstring(canvas.tostring_argb(), dtype=np.uint8)
+
+
+
+    # 重构成w h 4(argb)图像
+    buf.shape = (w, h, 4)
+    # 转换为 RGBA
+    buf = np.roll(buf, 3, axis=2)
+    # 得到 Image RGBA图像对象 (需要Image对象的同学到此为止就可以了)
+    image = Image.frombytes("RGBA", (w, h), buf.tostring())
+
+
+    return image
 
 
 
@@ -112,9 +134,9 @@ set(data_all[data_all["MATCH_ID"]==option_match]["FROM_TEAM_ID"].unique())
 
 
 if st.button('Start'):
-    plot_passing_netowrk(gendata(option_match,option_team))
+    image=plot_passing_netowrk(gendata(option_match,option_team))
 
-    image = Image.open('1.jpg')
+
 
     st.image(image, caption='passing network ')
 
