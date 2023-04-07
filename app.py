@@ -83,7 +83,7 @@ def plot_passing_netowrk(passing_data):
 
     from visualization.passing_network import draw_pitch, draw_pass_map
     import matplotlib.pyplot as plt
-    plt.rcParams["font.sans-serif"]=["Songti"] #设置字体
+    plt.rcParams["font.sans-serif"]=["SimHei"] #设置字体
     plt.rcParams["axes.unicode_minus"]=False #该语句解决图像中的“-”负号的乱码问题
     plot_title =""
 
