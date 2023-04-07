@@ -4,6 +4,5 @@ requests
 matplotlib
 numpy
 socceraction
-warnings
 xgboost
 tqdm
